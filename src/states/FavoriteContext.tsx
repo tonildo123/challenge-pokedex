@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { PokemonListItem } from '../hooks/usePokemon';
+import { Text, View } from 'react-native';
 
 const FAVORITES_KEY = 'POKEDEX_FAVORITES';
 
@@ -15,18 +16,29 @@ const FavoritesContext = createContext<FavoritesContextProps | undefined>(undefi
 
 export function FavoritesProvider({ children }: { children: ReactNode }) {
   const [favorites, setFavorites] = useState<PokemonListItem[]>([]);
+  const [initialized, setInitialized] = useState(false);
 
-  // Cargar favoritos al iniciar
+  // Leer favoritos al iniciar
   useEffect(() => {
-    AsyncStorage.getItem(FAVORITES_KEY).then(data => {
+  AsyncStorage.getItem(FAVORITES_KEY)
+    .then(data => {
+      console.log('AsyncStorage responded', data);
       if (data) setFavorites(JSON.parse(data));
+      setInitialized(true);
+      console.log('Initialized set to true');
+    })
+    .catch(err => {
+      console.log('Error leyendo favoritos:', err);
+      setInitialized(true); // Asegúrate de inicializar aunque falle
     });
-  }, []);
+}, []);
 
   // Guardar favoritos cuando cambian
   useEffect(() => {
-    AsyncStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
-  }, [favorites]);
+    if (initialized) {
+      AsyncStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+    }
+  }, [favorites, initialized]);
 
   const addFavorite = (pokemon: PokemonListItem) => {
     setFavorites(prev =>
@@ -40,6 +52,11 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
 
   const isFavorite = (pokemon: PokemonListItem) =>
     favorites.some(p => p.name === pokemon.name);
+
+  if (!initialized) {
+    console.log('Esperando inicialización de favoritos...');
+    return <View><Text style={{ color: 'black' }}>Cargando favoritos...</Text></View>;
+    }
 
   return (
     <FavoritesContext.Provider value={{ favorites, addFavorite, removeFavorite, isFavorite }}>

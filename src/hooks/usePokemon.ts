@@ -22,7 +22,7 @@ export function usePokemon(): UsePokemonResult {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Cargar lista local al iniciar
+  // Leer lista local al iniciar
   useEffect(() => {
     AsyncStorage.getItem(POKEMON_LIST_KEY).then(data => {
       if (data) setPokemons(JSON.parse(data));
