@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { View, FlatList, ActivityIndicator, Text, TextInput } from 'react-native';
 import { usePokemon } from '../../hooks/usePokemon';
 import PokemonCard from '../../components/pokemon-card';
+import ErrorMessage from '../../components/error-messages';
+import Loader from '../../components/loader';
 
 const PokemonListScreen = () => {
   const { pokemons, fetchPokemons, loading, error } = usePokemon();
   const [search, setSearch] = useState('');
-
-  // Filtra los pokemones por nombre en tiempo real
   const filteredPokemons = pokemons.filter(p =>
     p.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -26,15 +26,30 @@ const PokemonListScreen = () => {
           borderColor: '#ccc',
         }}
       />
-      {error && <Text>{error}</Text>}
+      {error && <ErrorMessage message={error} />}
+      {loading && pokemons.length === 0 ? (
+        <Loader />
+      ) : (
       <FlatList
         data={filteredPokemons}
         keyExtractor={(item, index) => item.name + '-' + index}
         renderItem={({ item }) => <PokemonCard pokemon={item} />}
         onEndReached={fetchPokemons}
         onEndReachedThreshold={0.5}
+        ListEmptyComponent={
+            !loading && (
+              <ErrorMessage
+                message={
+                  search
+                    ? 'Sin resultados de búsqueda'
+                    : 'No hay pokemones para mostrar'
+                }
+              />
+            )
+          }
         ListFooterComponent={loading ? <ActivityIndicator /> : null}
       />
+      )}
     </View>
   );
 }
