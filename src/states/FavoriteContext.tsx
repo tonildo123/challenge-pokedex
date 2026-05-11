@@ -1,5 +1,8 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { PokemonListItem } from '../hooks/usePokemon';
+
+const FAVORITES_KEY = 'POKEDEX_FAVORITES';
 
 interface FavoritesContextProps {
   favorites: PokemonListItem[];
@@ -12,6 +15,18 @@ const FavoritesContext = createContext<FavoritesContextProps | undefined>(undefi
 
 export function FavoritesProvider({ children }: { children: ReactNode }) {
   const [favorites, setFavorites] = useState<PokemonListItem[]>([]);
+
+  // Cargar favoritos al iniciar
+  useEffect(() => {
+    AsyncStorage.getItem(FAVORITES_KEY).then(data => {
+      if (data) setFavorites(JSON.parse(data));
+    });
+  }, []);
+
+  // Guardar favoritos cuando cambian
+  useEffect(() => {
+    AsyncStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+  }, [favorites]);
 
   const addFavorite = (pokemon: PokemonListItem) => {
     setFavorites(prev =>
