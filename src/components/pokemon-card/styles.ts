@@ -13,12 +13,12 @@ export const styles = StyleSheet.create({
   favoriteIconContainer: {
     position: 'absolute',
     top: 8,
-    right: 8,
+    right: 80,
     zIndex: 1,
   },
   image: {
     width: 100,
-    height: 100,
+    height: 200,
     marginBottom: 8,
   },
   name: {

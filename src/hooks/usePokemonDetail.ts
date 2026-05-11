@@ -10,7 +10,7 @@ export interface PokemonDetail {
   abilities: { ability: { name: string } }[];
 }
 
-export function usePokemonDetail(name: string) {
+export const usePokemonDetail = (name: string) => {
   const [pokemon, setPokemon] = useState<PokemonDetail | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,4 +27,4 @@ export function usePokemonDetail(name: string) {
   }, [name]);
 
   return { pokemon, loading, error };
-}
+};

@@ -7,6 +7,7 @@ const POKEMON_LIST_KEY = 'POKEDEX_POKEMON_LIST';
 export interface PokemonListItem {
   name: string;
   url: string;
+  types?: { type: { name: string } }[];
 }
 
 interface UsePokemonResult {
@@ -31,29 +32,45 @@ export function usePokemon(): UsePokemonResult {
 
   // Guardar lista local cuando cambia
   useEffect(() => {
+    console.log('Primer pokemon:', pokemons[0]);
     if (pokemons.length > 0) {
       AsyncStorage.setItem(POKEMON_LIST_KEY, JSON.stringify(pokemons));
     }
   }, [pokemons]);
 
   const fetchPokemons = useCallback(async () => {
-    if (!nextUrl || loading) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await api.get(nextUrl);
-      setPokemons(prev => [...prev, ...response.data.results]);
-      setNextUrl(
-        response.data.next
-          ? response.data.next.replace(api.defaults.baseURL || '', '')
-          : null
-      );
-    } catch (err) {
-      setError('Error al cargar pokemones');
-    } finally {
-      setLoading(false);
-    }
-  }, [nextUrl, loading]);
+  if (!nextUrl || loading) return;
+  setLoading(true);
+  setError(null);
+  try {
+    const response = await api.get(nextUrl);
+    const basicList = response.data.results;
+
+    // Obtener detalles de cada pokémon (incluyendo types)
+    const detailedList = await Promise.all(
+      basicList.map(async (p: PokemonListItem) => {
+        try {
+          const res = await fetch(p.url);
+          const data = await res.json();
+          return { ...p, types: data.types };
+        } catch {
+          return { ...p, types: [] };
+        }
+      })
+    );
+
+    setPokemons(prev => [...prev, ...detailedList]);
+    setNextUrl(
+      response.data.next
+        ? response.data.next.replace(api.defaults.baseURL || '', '')
+        : null
+    );
+  } catch (err) {
+    setError('Error al cargar pokemones');
+  } finally {
+    setLoading(false);
+  }
+}, [nextUrl, loading]);
 
   useEffect(() => {
     fetchPokemons();

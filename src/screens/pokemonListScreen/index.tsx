@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, FlatList, ActivityIndicator, Text, TextInput } from 'react-native';
+import { View, FlatList, ActivityIndicator, TextInput } from 'react-native';
 import { usePokemon } from '../../hooks/usePokemon';
 import PokemonCard from '../../components/pokemon-card';
 import ErrorMessage from '../../components/error-messages';

@@ -4,23 +4,23 @@ export const CONSTANTS = {
 
 }
 
-export const COLORS = {
-    NORMAL: "#A8A77A",
-    FIRE: "#EE8130",
-    WATER: "#6390F0",
-    ELECTRIC: "#F7D02C",
-    GRASS: "#7AC74C",
-    ICE: "#96D9D6",
-    FIGHTING: "#C22E28",
-    POISON: "#A33EA1",
-    GROUND: "#E2BF65",
-    FLYING: "#A98FF3",
-    PSYCHIC: "#F95587",
-    BUG: "#A6B91A",
-    ROCK: "#B6A136",
-    GHOST: "#735797",
-    DRAGON: "#6F35FC",
-    DARK: "#705746",
-    STEEL: "#B7B7CE",
-    FAIRY: "#D685AD"
-}   
+export const TYPE_COLORS: Record<string, string> = {
+  normal: "#A8A77A",
+  fire: "#EE8130",
+  water: "#6390F0",
+  electric: "#F7D02C",
+  grass: "#7AC74C",
+  ice: "#96D9D6",
+  fighting: "#C22E28",
+  poison: "#A33EA1",
+  ground: "#E2BF65",
+  flying: "#A98FF3",
+  psychic: "#F95587",
+  bug: "#A6B91A",
+  rock: "#B6A136",
+  ghost: "#735797",
+  dragon: "#6F35FC",
+  dark: "#705746",
+  steel: "#B7B7CE",
+  fairy: "#D685AD",
+};
