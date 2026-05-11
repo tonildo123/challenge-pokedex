@@ -32,7 +32,6 @@ export function usePokemon(): UsePokemonResult {
 
   // Guardar lista local cuando cambia
   useEffect(() => {
-    console.log('Primer pokemon:', pokemons[0]);
     if (pokemons.length > 0) {
       AsyncStorage.setItem(POKEMON_LIST_KEY, JSON.stringify(pokemons));
     }

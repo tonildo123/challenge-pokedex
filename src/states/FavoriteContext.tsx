@@ -22,13 +22,10 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
   AsyncStorage.getItem(FAVORITES_KEY)
     .then(data => {
-      console.log('AsyncStorage responded', data);
       if (data) setFavorites(JSON.parse(data));
       setInitialized(true);
-      console.log('Initialized set to true');
     })
     .catch(err => {
-      console.log('Error leyendo favoritos:', err);
       setInitialized(true); // Asegúrate de inicializar aunque falle
     });
 }, []);
@@ -54,7 +51,6 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     favorites.some(p => p.name === pokemon.name);
 
   if (!initialized) {
-    console.log('Esperando inicialización de favoritos...');
     return <View><Text style={{ color: 'black' }}>Cargando favoritos...</Text></View>;
     }
 
