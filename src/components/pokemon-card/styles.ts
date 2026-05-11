@@ -21,6 +21,7 @@ export const styles = StyleSheet.create({
     height: 150,
     marginBottom: 8,
     backgroundColor:'transparent',
+    borderRadius: 16,
   },
   name: {
     fontWeight: 'bold',
