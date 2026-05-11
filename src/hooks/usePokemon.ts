@@ -1,7 +1,46 @@
+import { useState, useEffect, useCallback } from 'react';
+import api from '../services/api';
 
-const usePokemon = () => {
-
-return {}
+export interface PokemonListItem {
+  name: string;
+  url: string;
 }
 
-export default usePokemon;
+interface UsePokemonResult {
+  pokemons: PokemonListItem[];
+  fetchPokemons: () => void;
+  loading: boolean;
+  error: string | null;
+}
+
+export function usePokemon(): UsePokemonResult {
+  const [pokemons, setPokemons] = useState<PokemonListItem[]>([]);
+  const [nextUrl, setNextUrl] = useState<string | null>('?limit=20');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchPokemons = useCallback(async () => {
+    if (!nextUrl || loading) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await api.get(nextUrl);
+      setPokemons(prev => [...prev, ...response.data.results]);
+      setNextUrl(
+        response.data.next
+          ? response.data.next.replace(api.defaults.baseURL || '', '')
+          : null
+      );
+    } catch (err) {
+      setError('Error al cargar pokemones');
+    } finally {
+      setLoading(false);
+    }
+  }, [nextUrl, loading]);
+
+  useEffect(() => {
+    fetchPokemons();
+  }, []);
+
+  return { pokemons, fetchPokemons, loading, error };
+}

@@ -1,5 +1,6 @@
-export const ENDPOINTS = {
-    POKEMON: "https://pokeapi.co/api/v2/pokemon",
+export const CONSTANTS = {
+    ENDPOINT_POKEMON: "https://pokeapi.co/api/v2/pokemon",
+    QUESTION:"Quien es ese pokemon?"
 
 }
 
