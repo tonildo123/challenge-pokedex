@@ -29,7 +29,7 @@ const PokemonListScreen = () => {
       {error && <Text>{error}</Text>}
       <FlatList
         data={filteredPokemons}
-        keyExtractor={item => item.name}
+        keyExtractor={(item, index) => item.name + '-' + index}
         renderItem={({ item }) => <PokemonCard pokemon={item} />}
         onEndReached={fetchPokemons}
         onEndReachedThreshold={0.5}
