@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, FlatList, ActivityIndicator, TextInput } from 'react-native';
-import { usePokemon } from '../../hooks/usePokemon';
 import PokemonCard from '../../components/pokemon-card';
 import ErrorMessage from '../../components/error-messages';
 import Loader from '../../components/loader';
+import { usePokemon } from '../../hooks/usePokemon';
 
 const PokemonListScreen = () => {
   const { pokemons, fetchPokemons, loading, error } = usePokemon();
@@ -37,16 +37,16 @@ const PokemonListScreen = () => {
         onEndReached={fetchPokemons}
         onEndReachedThreshold={0.5}
         ListEmptyComponent={
-            !loading && (
-              <ErrorMessage
-                message={
-                  search
-                    ? 'Sin resultados de búsqueda'
-                    : 'No hay pokemones para mostrar'
-                }
-              />
-            )
-          }
+          !loading ? (
+            <ErrorMessage
+              message={
+                search
+                  ? 'Sin resultados de búsqueda'
+                  : 'No hay pokemones para mostrar'
+              }
+            />
+          ) : null
+        }
         ListFooterComponent={loading ? <ActivityIndicator /> : null}
       />
       )}
