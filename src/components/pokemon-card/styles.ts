@@ -2,13 +2,22 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   card: {
-    alignItems: 'center',
     margin: 8,
     padding: 12,
     backgroundColor: '#fff',
     borderRadius: 12,
     elevation: 2,
     position: 'relative',
+    flexDirection: 'row', 
+    alignItems: 'center'
+  },
+  descriptionCard:
+    { flex: 1, justifyContent: 'center' }
+  ,
+  typesAndFavoriteContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
   },
   favoriteIconContainer: {
     position: 'absolute',
